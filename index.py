@@ -2,6 +2,8 @@ import streamlit as st
 import preprocessor,helper
 import matplotlib.pyplot as plt
 import seaborn as sns
+from transformers import pipeline
+
 
 st.sidebar.title("Chat Analyzer")
 
@@ -11,7 +13,7 @@ if uploaded_file is not None:
     data = bytes_data.decode("utf-8")
     df = preprocessor.preprocess(data)
 
-    
+
     # fetch unique users
     user_list = df['user'].unique().tolist()
     user_list.remove('group_notification')
@@ -122,6 +124,7 @@ if uploaded_file is not None:
         st.title('Most commmon words')
         st.pyplot(fig)
 
+
         # emoji analysis
         emoji_df = helper.emoji_helper(selected_user,df)
         st.title("Emoji Analysis")
@@ -134,4 +137,15 @@ if uploaded_file is not None:
             fig,ax = plt.subplots()
             ax.pie(emoji_df[1].head(),labels=emoji_df[0].head(),autopct="%0.2f")
             st.pyplot(fig)
+        
+
+        # emotion detect. 
+        emotion = pipeline('sentiment-analysis', model='arpanghoshal/EmoRoBERTa')
+        emotion_labels[0]['label']
+
+        df = df[:100]
+        df['message'][1:10].apply(emotion)
+        df['message'][1:10].apply(get_emotion_label)
+        df['emotion'] = df['message'].apply(get_emotion_label)
+        sns.countplot(data = df, y = 'message').set_title("Emotion Distribution")
 
