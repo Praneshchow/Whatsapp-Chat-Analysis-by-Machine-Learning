@@ -2,7 +2,6 @@ import streamlit as st
 import preprocessor,helper
 import matplotlib.pyplot as plt
 import seaborn as sns
-# from transformers import pipeline
 import pandas as pd
 
 st.sidebar.title("Chat Analyzer")
@@ -14,7 +13,7 @@ if uploaded_file is not None:
     df = preprocessor.preprocess(data)
 
 
-    # fetch unique users
+    # Fetch unique users
     user_list = df['user'].unique().tolist()
     user_list.remove('group_notification')
     user_list.sort()
@@ -44,7 +43,7 @@ if uploaded_file is not None:
             st.title(num_links)
 
         
-        # monthly timeline
+        # Monthly timeline
         st.title("Monthly Timeline")
         timeline = helper.monthly_timeline(selected_user,df)
         fig,ax = plt.subplots()
@@ -53,7 +52,7 @@ if uploaded_file is not None:
         st.pyplot(fig)
 
 
-        # daily timeline
+        # Daily timeline
         st.title("Daily Timeline")
         daily_timeline = helper.daily_timeline(selected_user, df)
         fig, ax = plt.subplots()
@@ -62,7 +61,7 @@ if uploaded_file is not None:
         st.pyplot(fig)
 
         
-        # activity map
+        # Activity map
         st.title('Activity Map')
         col1,col2 = st.columns(2)
 
@@ -89,7 +88,7 @@ if uploaded_file is not None:
         st.pyplot(fig)
 
         
-        # finding the busiest users in the group(Group level)
+        # Finding the busiest users in the group(Group level)
         if selected_user == 'Overall':
             st.title('Most Busy Users')
             x,new_df = helper.most_busy_users(df)
@@ -113,7 +112,7 @@ if uploaded_file is not None:
         st.pyplot(fig)
 
         
-        # most common words
+        # Most common words
         most_common_df = helper.most_common_words(selected_user,df)
         fig,ax = plt.subplots()
 
@@ -128,18 +127,5 @@ if uploaded_file is not None:
         plt.show()
 
 
-        # # emotion detect.
-        # emotion = pipeline('sentiment-analysis', model='arpanghoshal/EmoRoBERTa')
-        # emotion_labels[0]['label']
-
-        # df = df[:100]
-        # df['message'][1:10].apply(emotion)
-        # def get_emotion_label(text):
-        #     return(emotion(text)[0]['label'])
-
-        # df['message'][1:10].apply(get_emotion_label)
-        # df['emotion'] = df['message'].apply(get_emotion_label)
-        # sns.countplot(data = df, y = 'message').set_title("Emotion Distribution")
-
-        # st.pyplot(fig)
+        
 
