@@ -22,9 +22,9 @@ if uploaded_file is not None:
 
     selected_user = st.sidebar.selectbox("Show analysis wrt",user_list)
 
+
     if st.sidebar.button("Show Analysis"):
 
-        
         # Stats Area
         num_messages, words, num_media_messages, num_links = helper.fetch_stats(selected_user,df)
         st.title("Top Statistics")
@@ -115,7 +115,6 @@ if uploaded_file is not None:
         
         # most common words
         most_common_df = helper.most_common_words(selected_user,df)
-
         fig,ax = plt.subplots()
 
         ax.barh(most_common_df[0],most_common_df[1])
@@ -124,33 +123,23 @@ if uploaded_file is not None:
         st.title('Most commmon words')
         st.pyplot(fig)
 
+        sns.countplot(x=df['message'])
+        plt.xticks(rotation=90)
+        plt.show()
 
-        # # emoji analysis
-        # emoji_df = helper.emoji_helper(selected_user,df)
-        # st.title("Emoji Analysis")
 
-        # col1,col2 = st.columns(2)
+        # # emotion detect.
+        # emotion = pipeline('sentiment-analysis', model='arpanghoshal/EmoRoBERTa')
+        # emotion_labels[0]['label']
 
-        # with col1:
-        #     st.dataframe(emoji_df)
-        # with col2:
-        #     fig,ax = plt.subplots()
-        #     ax.pie(emoji_df[1].head(),labels=emoji_df[0].head(),autopct="%0.2f")
-        #     st.pyplot(fig)
-        
+        # df = df[:100]
+        # df['message'][1:10].apply(emotion)
+        # def get_emotion_label(text):
+        #     return(emotion(text)[0]['label'])
 
-        # emotion detect. 
-        emotion = pipeline('sentiment-analysis', model='arpanghoshal/EmoRoBERTa')
-        emotion_labels[0]['label']
+        # df['message'][1:10].apply(get_emotion_label)
+        # df['emotion'] = df['message'].apply(get_emotion_label)
+        # sns.countplot(data = df, y = 'message').set_title("Emotion Distribution")
 
-        df = df[:100]
-        df['message'][1:10].apply(emotion)
-        def get_emotion_label(text):
-            return(emotion(text)[0]['label'])
-
-        df['message'][1:10].apply(get_emotion_label)
-        df['emotion'] = df['message'].apply(get_emotion_label)
-        sns.countplot(data = df, y = 'message').set_title("Emotion Distribution")
-
-        st.pyplot(fig)
+        # st.pyplot(fig)
 
